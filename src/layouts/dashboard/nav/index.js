@@ -64,11 +64,11 @@ export default function Nav({ openNav, onCloseNav }) {
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                ADMIN
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
+                Quản trị viên
               </Typography>
             </Box>
           </StyledAccount>

@@ -7,40 +7,43 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover 
 // mocks_
 import account from '../../../_mock/account';
 
-// ----------------------------------------------------------------------
+import { API_URL, xApiKey } from '../../../api/api';
 
-const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
-];
+
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const navigate = useNavigate();
-  const user = localStorage.getItem('user');
-  const json = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const json = JSON.parse(localStorage.getItem('tokens'));
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
-
   const handleClose = () => {
     setOpen(null);
   };
 
+
+
+  const logout = async () => {
+    await fetch(`${API_URL}auth/logout`, {
+      headers: {
+        'x-api-key': xApiKey,
+        'x-client-id': user._id,
+        'authorization': json.accessToken
+      },
+      method: 'POST',
+    }).then((response) => response.json())
+    .then(data => {
+      console.log(data);
+    })  
+  }
+
   const handleClose2 = () => {
     localStorage.clear();
+    logout();
     setOpen(null);
     navigate('/login', { replace: true });
   };
@@ -88,10 +91,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+          {user.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {user.email}
           </Typography>
         </Box>
 
